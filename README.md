@@ -1,19 +1,23 @@
-Multi-Client Private Chat is a C++ multi-threaded chat application using socket programming where:
+# Multi-Client Private Chat (Socket Programming)
 
-Multiple clients can connect to a server simultaneously.
+A simple multi-client **private chat application** built using **socket programming**.  
+It allows multiple clients to connect to a server, send/receive messages, and chat privately.
 
-Each client sends messages to the server.
+---
 
-Clients never see each other’s messages.
+## 🚀 Features
+- Multi-client support (via sockets & threading)
+- Private one-to-one messaging
+- Broadcast messages
+- Server-side client management
+- Lightweight and easy to run
 
-The server can reply privately to any specific client.
+---
 
-All communication between server and clients is private (except the server itself).
+## ⚙️ Installation
 
-Requirements
+Clone the repository:
 
-C++11 or higher
-
-POSIX-compliant system (Linux/macOS) or compatible socket support on Windows
-
-Terminal/command-line for running server and clients
+```bash
+git clone https://github.com/your-username/multi-client-chat.git
+cd multi-client-chat

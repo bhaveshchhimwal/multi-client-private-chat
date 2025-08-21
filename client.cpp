@@ -15,7 +15,8 @@ void receive_messages(int sock) {
         memset(buffer, 0, BUFFER_SIZE);
         int valread = read(sock, buffer, BUFFER_SIZE);
         if (valread <= 0) break;
-        std::cout << buffer << std::endl;
+        std::cout << "\n[Server]: " << buffer << std::endl;
+        std::cout << "> " << std::flush; // reprint input prompt
     }
 }
 
@@ -50,10 +51,14 @@ int main() {
     // Start thread to receive server messages
     std::thread(receive_messages, sock).detach();
 
+    std::string msg;
     while (true) {
-        std::string msg;
+        std::cout << "> " << std::flush;
         std::getline(std::cin, msg);
+        if (msg.empty()) continue;
+
         send(sock, msg.c_str(), msg.size(), 0);
+        std::cout << "[You]: " << msg << std::endl;
     }
 
     close(sock);

@@ -66,20 +66,27 @@ void handle_client(int client_socket) {
 }
 
 // Thread to handle server sending replies to clients
+// Thread to handle server sending replies to clients
 void server_input() {
     while (true) {
         std::string input;
         std::getline(std::cin, input);
 
-        // Format: ClientName: message
-        size_t colon = input.find(':');
-        if (colon == std::string::npos) {
-            std::cout << "[INFO] Use format: ClientName: message" << std::endl;
+        // Expected format: @ClientName message
+        if (input.empty() || input[0] != '@') {
+            std::cout << "[INFO] Use format: @ClientName message" << std::endl;
             continue;
         }
 
-        std::string target_name = input.substr(0, colon);
-        std::string message = input.substr(colon + 1);
+        // Find first space after @Name
+        size_t space = input.find(' ');
+        if (space == std::string::npos) {
+            std::cout << "[INFO] Use format: @ClientName message" << std::endl;
+            continue;
+        }
+
+        std::string target_name = input.substr(1, space - 1); // skip '@'
+        std::string message = input.substr(space + 1);
         message = "Server: " + message;
 
         std::lock_guard<std::mutex> lock(clients_mutex);
@@ -92,6 +99,8 @@ void server_input() {
         }
     }
 }
+
+            
 
 int main() {
     int server_fd;

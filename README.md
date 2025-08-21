@@ -56,7 +56,7 @@ g++ -std=c++11 client.cpp -o client -pthread
    - Clients send messages to the server.  
    - The server can send private messages using:
      ```
-     ClientName: message
+     @ClientName message
      ```
 
 ---

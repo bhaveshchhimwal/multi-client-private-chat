@@ -1,110 +1,76 @@
-# 🔒 Multi-Client Private Chat (C++ Sockets)
 
-This is a simple **multi-client private chat system** built with **C++** and sockets.  
-It allows multiple clients to connect to a central server and exchange private messages.  
+# 📘 README — Multi-Client Private Chat (C++)
 
----
-
-## ✨ Features
-- Multi-client support (each client handled in a separate thread)  
-- Clients are identified by **usernames**  
-- Server can send private messages to any client  
-- Works both on **same device (localhost)** and on **different devices in same network (LAN/WiFi)**  
+## 🚀 Features
+- Multi-client chat using sockets.  
+- Each client is identified by a **name**.  
+- Messages are displayed as:  
+  ClientName: message  
+- Private messages with **@mentions**:  
+  (private) Alice: hey @Bob  
 
 ---
 
-## ⚙️ Requirements
-- A C++11 or higher compatible compiler (g++, clang++)
-- Unix-based OS (Linux / macOS).  
-  > Windows users can use WSL (Windows Subsystem for Linux).  
+## 🖥️ Build Instructions
 
----
-
-## 🛠️ Compilation
-
-### Compile the server:
+### 🔹 macOS / Linux
 ```bash
-g++ -std=c++11 server.cpp -o server -pthread
+g++ -std=c++17 server.cpp -o server
+g++ -std=c++17 client.cpp -o client
+```
+Run the server:
+```bash
+./server
+```
+Run a client:
+```bash
+./client
 ```
 
-### Compile the client:
-```bash
-g++ -std=c++11 client.cpp -o client -pthread
+### 🔹 Windows (MinGW / g++)
+```powershell
+g++ -std=c++17 server.cpp -o server.exe -lws2_32
+g++ -std=c++17 client.cpp -o client.exe -lws2_32
 ```
-
----
-
-## 🚀 Usage
-
-### 1. Run on the **same device**
-1. Start the server:
-   ```bash
-   ./server
-   ```
-   You should see:
-   ```
-   [INFO] Server listening on port 12345
-   ```
-
-2. Start clients (open multiple terminals):
-   ```bash
-   ./client
-   ```
-   Enter your username when prompted.  
-
-3. Now you can chat!  
-   - Clients send messages to the server.  
-   - The server can send private messages using:
-     ```
-     @ClientName message
-     ```
-
----
-
-### 2. Run on **different devices (LAN/WiFi)**
-1. On the **server machine**, check your local IP address:  
-   ```bash
-   ifconfig | grep inet
-   ```
-   Example result:
-   ```
-   inet 192.168.202.155
-   ```
-   This is the **server IP**.
-
-2. Run the server on that machine:
-   ```bash
-   ./server
-   ```
-
-3. On the **client machine**, run:
-   ```bash
-   ./client 192.168.202.155
-   ```
-   (Replace with the server’s IP).  
-
-4. If both devices are on the same WiFi/LAN, the client should connect successfully.  
-
-✅ You can confirm connectivity using `ping`:
-```bash
-ping 192.168.202.155
+Run the server:
+```powershell
+server.exe
+```
+Run a client:
+```powershell
+client.exe
 ```
 
 ---
 
-## 📌 Example
-- Server starts on IP `192.168.202.155:12345`  
-- Alice runs `./client 192.168.202.155`  
-- Bob runs `./client 192.168.202.155`  
-- Server can type:
-  ```
-  Alice: Hello!
-  ```
-  ✅ Alice receives: `Server: Hello!`  
+## 🌐 Multi-Device Setup
+By default, the client connects to `127.0.0.1` (localhost).  
+If you want to connect from **another device on the same Wi-Fi/LAN**, you must change this in **client.cpp**:
+
+```cpp
+// Change this line in client.cpp
+std::string server_ip = "127.0.0.1";  // default (same computer)
+
+// Example: use your server machine’s LAN IP
+std::string server_ip = "192.168.1.100";  // replace with actual IP
+```
+
+➡️ To find your server’s LAN IP:
+- **macOS/Linux**: `ifconfig` or `ip addr show`
+- **Windows**: `ipconfig`
+
+Then rebuild the client and run it from the other device.
 
 ---
 
-## ⚠️ Notes
-- Both server and clients must be on the **same network** for LAN communication.  
-- For communication over the internet (WAN), you’d need **port forwarding** on the router (advanced).  
-- By default, the server listens on port `12345` (can be changed in `server.cpp`).  
+## 📝 Usage
+1. Start the **server** first.  
+2. Run multiple **clients** (on same or different machines).  
+3. Each client will be asked for a **name**.  
+4. Chat messages will appear like:  
+   Alice: hello everyone  
+   Bob: hi Alice  
+5. To send a **private message**:  
+   hey @Bob  
+   → Only Bob will receive:  
+   (private) Alice: hey @Bob  

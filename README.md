@@ -21,3 +21,5 @@ Clone the repository:
 ```bash
 git clone https://github.com/your-username/multi-client-chat.git
 cd multi-client-chat
+g++ server.cpp -o server -lpthread
+g++ client.cpp -o client -lpthread

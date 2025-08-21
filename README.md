@@ -1,6 +1,6 @@
 # 🔒 Multi-Client Private Chat (C++ Sockets)
 
-This is a simple **multi-client private chat system** built with **C++11** and sockets.  
+This is a simple **multi-client private chat system** built with **C++** and sockets.  
 It allows multiple clients to connect to a central server and exchange private messages.  
 
 ---
@@ -14,7 +14,7 @@ It allows multiple clients to connect to a central server and exchange private m
 ---
 
 ## ⚙️ Requirements
-- A C++11 compatible compiler (g++, clang++)  
+- A C++11 or higher compatible compiler (g++, clang++)
 - Unix-based OS (Linux / macOS).  
   > Windows users can use WSL (Windows Subsystem for Linux).  
 

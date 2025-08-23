@@ -1,5 +1,5 @@
 
-# 📘 README — Multi-Client Private Chat (C++
+# 📘 README — Multi-Client Private Chat (C++)
 
 ## 🚀 Features
 - Multi-client chat using sockets.  

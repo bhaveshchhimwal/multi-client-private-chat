@@ -66,31 +66,37 @@ void handle_client(int client_socket) {
 }
 
 // Thread to handle server sending replies to clients
-// Thread to handle server sending replies to clients
 void server_input() {
     while (true) {
         std::string input;
         std::getline(std::cin, input);
 
-        // Expected format: @ClientName message
-        if (input.empty() || input[0] != '@') {
-            std::cout << "[INFO] Use format: @ClientName message" << std::endl;
+        // Expected format: ClientName: message   OR   all: message
+        if (input.empty() || input.find(':') == std::string::npos) {
+            std::cout << "[INFO] Use format: ClientName: message OR all: message" << std::endl;
             continue;
         }
 
-        // Find first space after @Name
-        size_t space = input.find(' ');
-        if (space == std::string::npos) {
-            std::cout << "[INFO] Use format: @ClientName message" << std::endl;
-            continue;
-        }
+        // Split into name and message
+        size_t colon = input.find(':');
+        std::string target_name = input.substr(0, colon);
+        std::string message = input.substr(colon + 1);
 
-        std::string target_name = input.substr(1, space - 1); // skip '@'
-        std::string message = input.substr(space + 1);
+        // Trim leading spaces in message
+        message.erase(0, message.find_first_not_of(" \t"));
+
         message = "Server: " + message;
 
         std::lock_guard<std::mutex> lock(clients_mutex);
-        if (name_to_socket.find(target_name) != name_to_socket.end()) {
+
+        if (target_name == "all") {
+            // Broadcast to everyone
+            for (auto &[sock, name] : client_names) {
+                send_to_client(sock, message);
+            }
+            std::cout << "\033[1;32m[BROADCAST]: " << message << "\033[0m" << std::endl;
+        } else if (name_to_socket.find(target_name) != name_to_socket.end()) {
+            // Send to specific client
             int sock = name_to_socket[target_name];
             send_to_client(sock, message);
             std::cout << "\033[1;32m[SENT to " << target_name << "]: " << message << "\033[0m" << std::endl;
@@ -99,8 +105,6 @@ void server_input() {
         }
     }
 }
-
-            
 
 int main() {
     int server_fd;
